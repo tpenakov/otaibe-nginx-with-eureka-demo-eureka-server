@@ -1,0 +1,29 @@
+####
+# This Dockerfile is used in order to build a container that runs the Quarkus application in JVM mode
+#
+# Before building the docker image run:
+#
+# mvn package
+#
+# Then, build the image with:
+#
+# docker build -f src/main/docker/Dockerfile.jvm -t triphon/otaibe-nginx-with-eureka-demo-eureka-server .
+#
+# Then run the container using:
+#
+# docker run -i --rm -p 24455:24455 triphon/otaibe-nginx-with-eureka-demo-eureka-server
+#
+###
+FROM maven:3.6-amazoncorretto-11
+
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
+
+RUN mkdir /deployments
+
+COPY target/*.jar /deployments/app.jar
+
+EXPOSE 24455
+
+WORKDIR /deployments/
+
+CMD [ "java", "-jar", "app.jar" ]
